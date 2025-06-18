@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import rent.vehicle.dto.DeviceConfigCreateUpdateDto;
 import rent.vehicle.dto.DeviceConfigDto;
+import rent.vehicle.dto.ListDeviceConfigsRequest;
 
 import java.util.List;
 
@@ -19,4 +20,6 @@ public interface DeviceConfigService {
     List<DeviceConfigCreateUpdateDto> getListDevicesConfig();
 
     Page<DeviceConfigDto> findAllDeviceConfig(Pageable pageable);
+
+    Page<DeviceConfigDto> getListDevicesConfigByParam(ListDeviceConfigsRequest listDeviceConfigsRequest, Pageable pageable);
 }

@@ -10,8 +10,6 @@ import rent.vehicle.dto.DeviceConfigCreateUpdateDto;
 import rent.vehicle.dto.DeviceConfigDto;
 import rent.vehicle.dto.ListDeviceConfigsRequest;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/deviceconfig")
@@ -41,12 +39,11 @@ public class DeviceConfigController {
     }
 
     @GetMapping("/search")
-    public Page<DeviceConfigDto> getListDevicesConfig (
+    public Page<DeviceConfigDto> getListDevicesConfigByParam(
             @ModelAttribute ListDeviceConfigsRequest listDeviceConfigsRequest,
             @PageableDefault(size = 2)
             Pageable pageable) {
-        //TODO
-        return null;
+        return deviceConfigService.getListDevicesConfigByParam(listDeviceConfigsRequest, pageable);
     }
 
     @DeleteMapping("/{id}")
