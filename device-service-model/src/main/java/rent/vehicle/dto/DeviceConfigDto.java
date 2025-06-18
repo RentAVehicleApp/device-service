@@ -8,6 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeviceConfigDto {
+    /*
+    Identity
+     */
     private long id;
     private String name;
 }
