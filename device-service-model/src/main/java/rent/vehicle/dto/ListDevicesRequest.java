@@ -12,8 +12,9 @@ import rent.vehicle.enums.DeviceModel;
 public class ListDevicesRequest {
 
     private String serialNumber;
-    private DeviceConfigCreateUpdateDto deviceConfig;
+    private String serialNumberPart;
+    private long deviceConfigId;
     private DeviceModel deviceModel;
     ConnectionStatus connectionStatus;
-    private String nodes;
+    private String nodesPart;
 }

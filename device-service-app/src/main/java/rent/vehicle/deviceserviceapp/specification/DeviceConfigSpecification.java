@@ -4,11 +4,9 @@ import org.springframework.data.jpa.domain.Specification;
 import rent.vehicle.deviceserviceapp.model.DeviceConfig;
 import rent.vehicle.dto.ListDeviceConfigsRequest;
 
-import java.util.List;
-
 public class DeviceConfigSpecification {
 
-    public static Specification<DeviceConfig> hasName(String name) {
+    public static Specification<DeviceConfig> equalName(String name) {
         return (root, query, criteriaBuilder) -> {
             if (name == null || name.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
@@ -17,27 +15,28 @@ public class DeviceConfigSpecification {
         };
     }
 
-    public static Specification<DeviceConfig> nameContains(String name) {
+    public static Specification<DeviceConfig> containName(String namePart) {
         return (root, query, criteriaBuilder) -> {
-            if (name == null || name.trim().isEmpty()) {
+            if (namePart == null || namePart.trim().isEmpty()) {
                 return criteriaBuilder.conjunction();
             }
             return criteriaBuilder.like(
-                    criteriaBuilder.lower(root.get("name")), "%" + name.toLowerCase() + "%"
+                    criteriaBuilder.lower(root.get("name")), "%" + namePart.toLowerCase() + "%"
             );
         };
     }
 
-    public static Specification<DeviceConfig> nameByListNames(List<String> names) {
-        return (root, query, criteriaBuilder) -> {
-            if (names == null || names.isEmpty()) {
-                return criteriaBuilder.conjunction();
-            }
-            return root.get("name").in(names);
-        };
-    }
+    public static Specification<DeviceConfig> buildSpecification(ListDeviceConfigsRequest request) {
+        Specification<DeviceConfig> spec = (root, query, cb) -> cb.conjunction();
 
-    public static Specification<DeviceConfig> buildSpecification(ListDeviceConfigsRequest listDeviceConfigsRequest) {
-        return nameContains(listDeviceConfigsRequest.getNameOfConfig());
+        if (request.getName() != null && !request.getName().trim().isEmpty()) {
+            spec = spec.and(equalName(request.getName()));
+        }
+
+        if (request.getNamePart() != null && !request.getNamePart().trim().isEmpty()) {
+            spec = spec.and(containName(request.getNamePart()));
+        }
+
+        return spec;
     }
 }
