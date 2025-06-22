@@ -80,6 +80,10 @@ public class DeviceServiceImpl implements DeviceService {
             device.setDeviceModel(deviceCreateUpdateDto.getDeviceModel());
         }
 
+        if (deviceCreateUpdateDto.getConnectionStatus() != null) {
+            device.setConnectionStatus(deviceCreateUpdateDto.getConnectionStatus());
+        }
+
         if (deviceCreateUpdateDto.getNodes() != null) {
             device.setNodes(deviceCreateUpdateDto.getNodes());
         }

@@ -67,6 +67,18 @@ public class VehicleServisImpl implements VehicleService {
             vehicle.setVehicleModel(vehicleCreateUpdateDto.getVehicleModel());
         }
 
+        if (vehicleCreateUpdateDto.getAvailability() != null) {
+            vehicle.setAvailability(vehicleCreateUpdateDto.getAvailability());
+        }
+
+        if (vehicleCreateUpdateDto.getPoint() != null) {
+            vehicle.setPoint(vehicleCreateUpdateDto.getPoint());
+        }
+
+        if (vehicleCreateUpdateDto.getBatteryStatus() != null) {
+            vehicle.setBatteryStatus(vehicleCreateUpdateDto.getBatteryStatus());
+        }
+
         if (vehicleCreateUpdateDto.getNodes() != null) {
             vehicle.setNodes(vehicleCreateUpdateDto.getNodes());
         }
