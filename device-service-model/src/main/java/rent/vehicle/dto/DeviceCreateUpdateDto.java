@@ -1,6 +1,7 @@
 package rent.vehicle.dto;
 
 import lombok.*;
+import rent.vehicle.enums.ConnectionStatus;
 import rent.vehicle.enums.DeviceModel;
 
 @Getter
@@ -14,6 +15,7 @@ public class DeviceCreateUpdateDto {
     private String serialNumber;
     private long deviceConfigId;
     private DeviceModel deviceModel;
+    private ConnectionStatus connectionStatus;
     private String nodes;
 }
 

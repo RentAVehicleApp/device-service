@@ -36,6 +36,7 @@ public class Device implements Serializable {
     private ConnectionStatus connectionStatus;
 
     @Column(columnDefinition = "TEXT") //todo check if it is right
+
     private String nodes;
 
 }

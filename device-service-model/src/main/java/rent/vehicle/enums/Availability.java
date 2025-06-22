@@ -1,5 +1,5 @@
 package rent.vehicle.enums;
 
-public enum Availibility {
+public enum Availability {
     IN_USE, UNDER_REPAIR, DISCONNECTED, AVAILABLE;
 }

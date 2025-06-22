@@ -4,6 +4,7 @@ import org.springframework.data.jpa.domain.Specification;
 import rent.vehicle.deviceserviceapp.model.DeviceConfig;
 import rent.vehicle.dto.ListDeviceConfigsRequest;
 
+
 public class DeviceConfigSpecification {
 
     public static Specification<DeviceConfig> equalName(String name) {
