@@ -5,20 +5,19 @@ import org.modelmapper.ModelMapper;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rent.vehicle.deviceserviceapp.dao.DeviceRepository;
 import rent.vehicle.deviceserviceapp.model.Device;
 import rent.vehicle.deviceserviceapp.model.DeviceConfig;
+import rent.vehicle.deviceserviceapp.specification.DeviceSpecification;
 import rent.vehicle.dto.DeviceCreateUpdateDto;
 import rent.vehicle.dto.DeviceDto;
 import rent.vehicle.dto.ListDevicesRequest;
-import rent.vehicle.exception.RelatedEntityInUseException;
 import rent.vehicle.exception.DuplicateDeviceException;
 import rent.vehicle.exception.EntityNotFoundException;
-
-import java.util.List;
-import java.util.stream.Collectors;
+import rent.vehicle.exception.RelatedEntityInUseException;
 
 @Order(20)
 @Service
@@ -57,9 +56,15 @@ public class DeviceServiceImpl implements DeviceService {
     }
 
     @Override
-    public Page<DeviceDto> findDevicesByParams(ListDevicesRequest listDevicesRequest, Pageable pageable) {
-        //TODO Spring Data JPA + JpaSpecificationExecutor
-        return Page.empty();
+    public Page<DeviceDto> findDevicesByParams(
+            ListDevicesRequest listDevicesRequest,
+            Pageable pageable) {
+
+        Specification<Device> spec = DeviceSpecification.buildSpecification(listDevicesRequest);
+
+        Page<Device> devicePage = deviceRepository.findAll(spec, pageable);
+
+        return devicePage.map(device -> modelMapper.map(device, DeviceDto.class));
     }
 
     @Transactional
@@ -73,6 +78,10 @@ public class DeviceServiceImpl implements DeviceService {
         
         if (deviceCreateUpdateDto.getDeviceModel() != null) {
             device.setDeviceModel(deviceCreateUpdateDto.getDeviceModel());
+        }
+
+        if (deviceCreateUpdateDto.getConnectionStatus() != null) {
+            device.setConnectionStatus(deviceCreateUpdateDto.getConnectionStatus());
         }
 
         if (deviceCreateUpdateDto.getNodes() != null) {

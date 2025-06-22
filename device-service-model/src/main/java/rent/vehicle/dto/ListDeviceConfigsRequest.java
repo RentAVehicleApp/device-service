@@ -8,5 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ListDeviceConfigsRequest {
-    String nameOfConfig;
+    String name;
+    String namePart;
+    //todo поиск по id Vehicle - здесь или не здесь
 }

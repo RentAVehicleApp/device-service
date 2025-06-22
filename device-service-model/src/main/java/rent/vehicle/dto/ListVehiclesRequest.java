@@ -1,11 +1,10 @@
 package rent.vehicle.dto;
 
 import lombok.*;
-import rent.vehicle.enums.Availibility;
+import rent.vehicle.enums.Availability;
 import rent.vehicle.enums.VehicleModel;
 
 import java.awt.*;
-import java.util.Locale;
 
 @Getter
 @Setter
@@ -13,10 +12,13 @@ import java.util.Locale;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ListVehiclesRequest {
-    String registrationNumber;
-    VehicleModel vehicleModel;
-    ListDevicesRequest device;
-    Availibility availibility;
-    Point locale;
-    String nodes;
+    private String registrationNumber;
+    private String registrationNumberPart;
+    private VehicleModel vehicleModel;
+    private Availability availability;
+    private Point point;
+    private Integer batteryStatusMin;
+    private Integer batteryStatusMax;
+    private String nodes;
+
 }

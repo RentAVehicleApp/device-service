@@ -36,3 +36,10 @@ public class ServiceConfig {
 
 
 }
+
+/* Вариант 2: Хранить origins в БД и проверять в CORS фильтре
+Сделай собственный CorsFilter, который проверяет Origin в заголовке запроса.
+
+Разрешённые адреса храни в БД или Redis — можно менять без перезапуска.
+https://chatgpt.com/share/6852c4ce-e7a8-800b-bcb5-57e2259a11a1
+*/

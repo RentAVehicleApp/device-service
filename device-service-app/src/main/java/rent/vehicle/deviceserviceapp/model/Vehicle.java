@@ -2,7 +2,7 @@ package rent.vehicle.deviceserviceapp.model;
 
 import jakarta.persistence.*;
 import lombok.*;
-import rent.vehicle.enums.Availibility;
+import rent.vehicle.enums.Availability;
 import rent.vehicle.enums.VehicleModel;
 
 import java.awt.*;
@@ -28,12 +28,12 @@ public class Vehicle implements Serializable {
     @Column()
     private VehicleModel vehicleModel;
 
-    private Availibility availibility;
+    private Availability availability;
 
     @Column (columnDefinition = "geometry(Point,4326)")
     private Point point;
 
-    int batteryStatus;
+    private int batteryStatus;
 
     @Column (columnDefinition = "TEXT")
     private String nodes;

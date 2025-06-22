@@ -5,6 +5,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,13 +13,12 @@ import org.springframework.web.server.ResponseStatusException;
 import rent.vehicle.deviceserviceapp.dao.VehicleRepository;
 import rent.vehicle.deviceserviceapp.model.Device;
 import rent.vehicle.deviceserviceapp.model.Vehicle;
+import rent.vehicle.deviceserviceapp.specification.VehicleSpecification;
 import rent.vehicle.dto.ListVehiclesRequest;
 import rent.vehicle.dto.VehicleCreateUpdateDto;
 import rent.vehicle.dto.VehicleDto;
 import rent.vehicle.exception.DuplicateVehicleException;
 import rent.vehicle.exception.EntityNotFoundException;
-
-import java.util.List;
 
 @Order(30)
 @Service
@@ -67,6 +67,18 @@ public class VehicleServisImpl implements VehicleService {
             vehicle.setVehicleModel(vehicleCreateUpdateDto.getVehicleModel());
         }
 
+        if (vehicleCreateUpdateDto.getAvailability() != null) {
+            vehicle.setAvailability(vehicleCreateUpdateDto.getAvailability());
+        }
+
+        if (vehicleCreateUpdateDto.getPoint() != null) {
+            vehicle.setPoint(vehicleCreateUpdateDto.getPoint());
+        }
+
+        if (vehicleCreateUpdateDto.getBatteryStatus() != null) {
+            vehicle.setBatteryStatus(vehicleCreateUpdateDto.getBatteryStatus());
+        }
+
         if (vehicleCreateUpdateDto.getNodes() != null) {
             vehicle.setNodes(vehicleCreateUpdateDto.getNodes());
         }
@@ -94,9 +106,15 @@ public class VehicleServisImpl implements VehicleService {
     }
 
     @Override
-    public Page<VehicleDto> findVehicleByParams(ListVehiclesRequest listVehiclesRequest, Pageable pageable) {
-        //TODO
-        return Page.empty();
+    public Page<VehicleDto> findVehicleByParams(
+            ListVehiclesRequest listVehiclesRequest,
+            Pageable pageable) {
+
+        Specification<Vehicle> spec = VehicleSpecification.buildSpecification(listVehiclesRequest);
+
+        Page<Vehicle> vehiclePage = vehicleRepository.findAll(spec, pageable);
+
+        return vehiclePage.map(vehicle -> modelMapper.map(vehicle, VehicleDto.class));
     }
 
 

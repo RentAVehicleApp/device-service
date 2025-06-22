@@ -4,6 +4,8 @@ import lombok.*;
 import rent.vehicle.enums.ConnectionStatus;
 import rent.vehicle.enums.DeviceModel;
 
+import java.util.Set;
+
 @Getter
 @Setter
 @Builder
@@ -12,8 +14,9 @@ import rent.vehicle.enums.DeviceModel;
 public class ListDevicesRequest {
 
     private String serialNumber;
-    private DeviceConfigCreateUpdateDto deviceConfig;
+    private String serialNumberPart;
+    private Set<Long> deviceConfigsIdList;
     private DeviceModel deviceModel;
-    ConnectionStatus connectionStatus;
-    private String nodes;
+    private ConnectionStatus connectionStatus;
+    private String nodesPart;
 }

@@ -13,7 +13,7 @@ import rent.vehicle.deviceserviceapp.model.Vehicle;
 import rent.vehicle.deviceserviceapp.service.DeviceConfigService;
 import rent.vehicle.deviceserviceapp.service.DeviceService;
 import rent.vehicle.deviceserviceapp.service.VehicleService;
-import rent.vehicle.enums.Availibility;
+import rent.vehicle.enums.Availability;
 import rent.vehicle.enums.ConnectionStatus;
 import rent.vehicle.enums.DeviceModel;
 import rent.vehicle.enums.VehicleModel;
@@ -34,6 +34,13 @@ public class CreateDateInDBInitializer implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+
+        if (deviceConfigRepository.count() > 0) {
+            System.out.println("Initial data already exists, skipping initialization.");
+            return;
+        }
+
+
         DeviceConfig deviceConfig = DeviceConfig.builder()
                 .name("Created config 1")
                 .build();
@@ -78,7 +85,7 @@ public class CreateDateInDBInitializer implements CommandLineRunner {
 //        Vehicle
 
         Vehicle vehicle1 = Vehicle.builder()
-                .availibility(Availibility.IN_USE)
+                .availability(Availability.IN_USE)
                 .batteryStatus(75)
                 .vehicleModel(VehicleModel.MODEL1)
                 .device(device1)
@@ -89,7 +96,7 @@ public class CreateDateInDBInitializer implements CommandLineRunner {
         System.out.println("log5: " + vehicle1.toString());
 
         Vehicle vehicle2 = Vehicle.builder()
-                .availibility(Availibility.IN_USE)
+                .availability(Availability.IN_USE)
                 .batteryStatus(11)
                 .vehicleModel(VehicleModel.MODEL1)
                 .device(device2)
@@ -100,7 +107,7 @@ public class CreateDateInDBInitializer implements CommandLineRunner {
         System.out.println("log6: " + vehicle2.toString());
 
         Vehicle vehicle3 = Vehicle.builder()
-                .availibility(Availibility.AVAILABLE)
+                .availability(Availability.AVAILABLE)
                 .batteryStatus(100)
                 .vehicleModel(VehicleModel.MODEL1)
                 .device(device3)

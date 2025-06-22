@@ -11,8 +11,6 @@ import rent.vehicle.dto.ListVehiclesRequest;
 import rent.vehicle.dto.VehicleCreateUpdateDto;
 import rent.vehicle.dto.VehicleDto;
 
-import java.util.List;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/vehicles")
@@ -33,7 +31,6 @@ public class VehicleController {
     public Page<VehicleDto> findAllVehicles (
             @PageableDefault(
                     size = 2,
-//                    sort = "",
                     direction = Sort.Direction.DESC
             )
             Pageable pageable) {
@@ -45,7 +42,6 @@ public class VehicleController {
             @ModelAttribute ListVehiclesRequest listVehiclesRequest,
             @PageableDefault(
                     size = 2,
-//                    sort = "",
                     direction = Sort.Direction.DESC
             )
             Pageable pageable

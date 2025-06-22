@@ -1,7 +1,7 @@
 package rent.vehicle.dto;
 
 import lombok.*;
-import rent.vehicle.enums.Availibility;
+import rent.vehicle.enums.Availability;
 import rent.vehicle.enums.VehicleModel;
 
 import java.awt.*;
@@ -17,7 +17,8 @@ public class VehicleDto {
     private String registrationNumber;
     private VehicleModel vehicleModel;
     private DeviceDto device;
-    private Availibility availibility;
+    private Availability availability;
     private Point point;
+    private Integer batteryStatus;
     private String nodes;
 }
