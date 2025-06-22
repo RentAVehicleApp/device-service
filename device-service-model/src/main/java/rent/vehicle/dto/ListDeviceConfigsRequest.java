@@ -10,5 +10,4 @@ import lombok.*;
 public class ListDeviceConfigsRequest {
     String name;
     String namePart;
-    //todo поиск по id Vehicle - здесь или не здесь
 }

@@ -5,6 +5,7 @@ import rent.vehicle.enums.Availability;
 import rent.vehicle.enums.VehicleModel;
 
 import java.awt.*;
+import java.util.Set;
 
 @Getter
 @Setter
@@ -20,5 +21,7 @@ public class ListVehiclesRequest {
     private Integer batteryStatusMin;
     private Integer batteryStatusMax;
     private String nodes;
+    private ListDevicesRequest listDevicesRequest;
+    private Set<Long> deviceIds;
 
 }

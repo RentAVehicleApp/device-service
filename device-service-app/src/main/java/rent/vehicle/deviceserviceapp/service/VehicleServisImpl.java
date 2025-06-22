@@ -14,11 +14,14 @@ import rent.vehicle.deviceserviceapp.dao.VehicleRepository;
 import rent.vehicle.deviceserviceapp.model.Device;
 import rent.vehicle.deviceserviceapp.model.Vehicle;
 import rent.vehicle.deviceserviceapp.specification.VehicleSpecification;
+import rent.vehicle.dto.DeviceDto;
 import rent.vehicle.dto.ListVehiclesRequest;
 import rent.vehicle.dto.VehicleCreateUpdateDto;
 import rent.vehicle.dto.VehicleDto;
 import rent.vehicle.exception.DuplicateVehicleException;
 import rent.vehicle.exception.EntityNotFoundException;
+
+import java.util.stream.Collectors;
 
 @Order(30)
 @Service
@@ -109,6 +112,15 @@ public class VehicleServisImpl implements VehicleService {
     public Page<VehicleDto> findVehicleByParams(
             ListVehiclesRequest listVehiclesRequest,
             Pageable pageable) {
+
+        if (listVehiclesRequest.getListDevicesRequest() != null) {
+            Page<DeviceDto> deviceDtoPage = deviceService.findDevicesByParams(listVehiclesRequest.getListDevicesRequest(), pageable);
+            listVehiclesRequest.setDeviceIds(
+                    deviceDtoPage.stream()
+                            .map(DeviceDto::getId)
+                            .collect(Collectors.toSet())
+            );
+        }
 
         Specification<Vehicle> spec = VehicleSpecification.buildSpecification(listVehiclesRequest);
 

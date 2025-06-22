@@ -15,8 +15,14 @@ public class ListDevicesRequest {
 
     private String serialNumber;
     private String serialNumberPart;
-    private Set<Long> deviceConfigsIdList;
     private DeviceModel deviceModel;
     private ConnectionStatus connectionStatus;
     private String nodesPart;
+
+
+    private ListVehiclesRequest listVehiclesRequest;
+    private Set<Long> vehiclesIds;
+
+    private ListDeviceConfigsRequest listDeviceConfigsRequest;
+    private Set<Long> deviceConfigIds;
 }
