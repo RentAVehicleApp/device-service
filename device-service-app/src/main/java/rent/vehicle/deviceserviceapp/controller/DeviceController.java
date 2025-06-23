@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+import rent.vehicle.constants.ApiPaths;
 import rent.vehicle.deviceserviceapp.service.DeviceService;
 import rent.vehicle.deviceserviceapp.service.SearchService;
 import rent.vehicle.dto.DeviceCreateUpdateDto;
@@ -13,7 +14,7 @@ import rent.vehicle.dto.list_request_dto.ListDevicesRequest;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/devices")
+@RequestMapping(ApiPaths.PATH_DEVICE)
 public class DeviceController {
     final DeviceService deviceService;
     final SearchService searchService;
@@ -23,12 +24,12 @@ public class DeviceController {
         return deviceService.createDevice(deviceCreateUpdateDto);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ApiPaths.PATH_ID)
     public DeviceDto findDeviceById (@PathVariable long id) {
         return deviceService.findDeviceById (id);
     }
 
-    @GetMapping("/search")
+    @GetMapping(ApiPaths.PATH_SEARCH)
     public Page<DeviceDto> findDevicesByParams (
             @ModelAttribute ListDevicesRequest listDevicesRequest,
             @PageableDefault (size = 2)
@@ -36,19 +37,19 @@ public class DeviceController {
         return searchService.findDevicesByParams(listDevicesRequest, pageable);
     }
 
-    @GetMapping("/list")
+    @GetMapping(ApiPaths.PATH_LIST)
     public Page<DeviceDto> findAllDevices (
             @PageableDefault (size = 2)
             Pageable pageable) {
         return deviceService.findAllDevices(pageable);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(ApiPaths.PATH_ID)
     public DeviceDto updateDevice (@PathVariable long id, @RequestBody DeviceCreateUpdateDto deviceCreateUpdateDto) {
         return deviceService.updateDevice (id, deviceCreateUpdateDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ApiPaths.PATH_ID)
     public void removeDevice (@PathVariable long id) {
         deviceService.removeDevice (id);
     }

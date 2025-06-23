@@ -6,6 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+import rent.vehicle.constants.ApiPaths;
 import rent.vehicle.deviceserviceapp.service.SearchService;
 import rent.vehicle.deviceserviceapp.service.VehicleService;
 import rent.vehicle.dto.VehicleCreateUpdateDto;
@@ -14,7 +15,7 @@ import rent.vehicle.dto.list_request_dto.ListVehiclesRequest;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/vehicles")
+@RequestMapping(ApiPaths.PATH_VEHICLE)
 public class VehicleController {
     final VehicleService vehicleService;
     final SearchService searchService;
@@ -24,12 +25,12 @@ public class VehicleController {
         return vehicleService.createVehicle (vehicleCreateUpdateDto);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ApiPaths.PATH_ID)
     public VehicleDto findVehicleById (@PathVariable long id) {
         return vehicleService.findVehicleById (id);
     }
 
-    @GetMapping("/list")
+    @GetMapping(ApiPaths.PATH_LIST)
     public Page<VehicleDto> findAllVehicles (
             @PageableDefault(
                     size = 2,
@@ -39,7 +40,7 @@ public class VehicleController {
         return vehicleService.findAllVehicles (pageable);
     }
 
-    @GetMapping("/search")
+    @GetMapping(ApiPaths.PATH_SEARCH)
     public Page<VehicleDto> findVehicleByParams (
             @ModelAttribute ListVehiclesRequest listVehiclesRequest,
             @PageableDefault(
@@ -51,12 +52,12 @@ public class VehicleController {
         return searchService.findVehicleByParams(listVehiclesRequest, pageable);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(ApiPaths.PATH_ID)
     public VehicleDto updateVehicle (@PathVariable long id, @RequestBody VehicleCreateUpdateDto vehicleCreateUpdateDto) {
         return vehicleService.updateVehicle (id, vehicleCreateUpdateDto);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ApiPaths.PATH_ID)
     public void removeVehicle (@PathVariable long id) {
         vehicleService.removeVehicle (id);
     }

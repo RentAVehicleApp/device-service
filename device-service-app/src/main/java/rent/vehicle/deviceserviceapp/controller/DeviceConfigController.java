@@ -5,6 +5,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+import rent.vehicle.constants.ApiPaths;
 import rent.vehicle.deviceserviceapp.service.DeviceConfigService;
 import rent.vehicle.deviceserviceapp.service.SearchService;
 import rent.vehicle.dto.DeviceConfigCreateUpdateDto;
@@ -13,8 +14,9 @@ import rent.vehicle.dto.list_request_dto.ListDeviceConfigsRequest;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/v1/deviceconfig")
+@RequestMapping(ApiPaths.PATH_DEVICE_CONFIG)
 public class DeviceConfigController {
+
     final DeviceConfigService deviceConfigService;
     final SearchService searchService;
 
@@ -23,24 +25,24 @@ public class DeviceConfigController {
         return deviceConfigService.createDeviceConfig(deviceConfigCreateUpdateDto);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping(ApiPaths.PATH_ID)
     public DeviceConfigCreateUpdateDto updateDeviceConfig (@PathVariable long id, @RequestBody DeviceConfigCreateUpdateDto deviceConfigCreateUpdateDto) {
         return deviceConfigService.updateDeviceConfig (id, deviceConfigCreateUpdateDto);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping(ApiPaths.PATH_ID)
     public DeviceConfigDto findDeviceConfigById (@PathVariable long id) {
         return deviceConfigService.findDeviceConfigById (id);
     }
 
-    @GetMapping("/list")
+    @GetMapping(ApiPaths.PATH_LIST)
     public Page<DeviceConfigDto> findAllDeviceConfig(
             @PageableDefault(size = 2)
             Pageable pageable) {
         return deviceConfigService.findAllDeviceConfig(pageable);
     }
 
-    @GetMapping("/search")
+    @GetMapping(ApiPaths.PATH_SEARCH)
     public Page<DeviceConfigDto> findListDevicesConfigByParam(
             @ModelAttribute ListDeviceConfigsRequest listDeviceConfigsRequest,
             @PageableDefault(size = 2)
@@ -48,7 +50,7 @@ public class DeviceConfigController {
         return searchService.getListDevicesConfigByParam(listDeviceConfigsRequest, pageable);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping(ApiPaths.PATH_ID)
     public void removeDeviceConfig (@PathVariable long id) {
         deviceConfigService.removeDeviceConfig (id);
     }
