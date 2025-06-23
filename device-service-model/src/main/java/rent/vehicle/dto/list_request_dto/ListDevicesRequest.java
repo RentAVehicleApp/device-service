@@ -1,4 +1,4 @@
-package rent.vehicle.dto;
+package rent.vehicle.dto.list_request_dto;
 
 import lombok.*;
 import rent.vehicle.enums.ConnectionStatus;
@@ -18,10 +18,6 @@ public class ListDevicesRequest {
     private DeviceModel deviceModel;
     private ConnectionStatus connectionStatus;
     private String nodesPart;
-
-
-    private ListVehiclesRequest listVehiclesRequest;
-    private Set<Long> vehiclesIds;
 
     private ListDeviceConfigsRequest listDeviceConfigsRequest;
     private Set<Long> deviceConfigIds;

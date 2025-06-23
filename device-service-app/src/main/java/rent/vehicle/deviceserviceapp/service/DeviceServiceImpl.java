@@ -11,16 +11,11 @@ import org.springframework.transaction.annotation.Transactional;
 import rent.vehicle.deviceserviceapp.dao.DeviceRepository;
 import rent.vehicle.deviceserviceapp.model.Device;
 import rent.vehicle.deviceserviceapp.model.DeviceConfig;
-import rent.vehicle.deviceserviceapp.specification.DeviceSpecification;
-import rent.vehicle.dto.DeviceConfigDto;
 import rent.vehicle.dto.DeviceCreateUpdateDto;
 import rent.vehicle.dto.DeviceDto;
-import rent.vehicle.dto.ListDevicesRequest;
 import rent.vehicle.exception.DuplicateDeviceException;
 import rent.vehicle.exception.EntityNotFoundException;
 import rent.vehicle.exception.RelatedEntityInUseException;
-
-import java.util.stream.Collectors;
 
 @Order(20)
 @Service
@@ -28,7 +23,6 @@ import java.util.stream.Collectors;
 public class DeviceServiceImpl implements DeviceService {
     final DeviceRepository deviceRepository;
     final DeviceConfigService deviceConfigService;
-    //    final VehicleService vehicleService;
     final ModelMapper modelMapper;
 
     @Transactional
@@ -59,35 +53,7 @@ public class DeviceServiceImpl implements DeviceService {
         return modelMapper.map(device, DeviceDto.class);
     }
 
-    @Override
-    public Page<DeviceDto> findDevicesByParams(
-            ListDevicesRequest listDevicesRequest,
-            Pageable pageable) {
 
-        if (listDevicesRequest.getListDeviceConfigsRequest() != null) {
-            Page<DeviceConfigDto> deviceConfigDtoPage = deviceConfigService.getListDevicesConfigByParam(listDevicesRequest.getListDeviceConfigsRequest(), pageable);
-            listDevicesRequest.setDeviceConfigIds(
-                    deviceConfigDtoPage.stream()
-                            .map(DeviceConfigDto::getId)
-                            .collect(Collectors.toSet())
-            );
-        }
-
-//        if(listDevicesRequest.getListVehiclesRequest() != null) {
-//            Page<VehicleDto> vehicleDtoPage = vehicleService.findVehicleByParams(listDevicesRequest.getListVehiclesRequest(), pageable);
-//            listDevicesRequest.setVehiclesIds(
-//                    vehicleDtoPage.stream()
-//                            .map(VehicleDto::getId)
-//                            .collect(Collectors.toSet())
-//            );
-//        }
-
-        Specification<Device> spec = DeviceSpecification.buildSpecification(listDevicesRequest);
-
-        Page<Device> devicePage = deviceRepository.findAll(spec, pageable);
-
-        return devicePage.map(device -> modelMapper.map(device, DeviceDto.class));
-    }
 
     @Transactional
     @Override
@@ -140,6 +106,11 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceRepository.findAll(pageable)
                 .map(device -> modelMapper.map(device, DeviceDto.class));
 
+    }
+
+    @Override
+    public Page<Device> findAllBySpec(Specification<Device> spec, Pageable pageable) {
+        return deviceRepository.findAll(spec, pageable);
     }
 
 }

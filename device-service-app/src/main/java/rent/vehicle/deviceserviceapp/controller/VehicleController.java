@@ -6,16 +6,18 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
+import rent.vehicle.deviceserviceapp.service.SearchService;
 import rent.vehicle.deviceserviceapp.service.VehicleService;
-import rent.vehicle.dto.ListVehiclesRequest;
 import rent.vehicle.dto.VehicleCreateUpdateDto;
 import rent.vehicle.dto.VehicleDto;
+import rent.vehicle.dto.list_request_dto.ListVehiclesRequest;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/vehicles")
 public class VehicleController {
     final VehicleService vehicleService;
+    final SearchService searchService;
 
     @PostMapping
     public VehicleDto createVehicle (@RequestBody VehicleCreateUpdateDto vehicleCreateUpdateDto) {
@@ -46,7 +48,7 @@ public class VehicleController {
             )
             Pageable pageable
     ) {
-        return vehicleService.findVehicleByParams (listVehiclesRequest, pageable);
+        return searchService.findVehicleByParams(listVehiclesRequest, pageable);
     }
 
     @PutMapping("/{id}")

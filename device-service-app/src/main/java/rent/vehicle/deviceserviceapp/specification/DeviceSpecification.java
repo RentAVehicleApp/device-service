@@ -2,7 +2,7 @@ package rent.vehicle.deviceserviceapp.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import rent.vehicle.deviceserviceapp.model.Device;
-import rent.vehicle.dto.ListDevicesRequest;
+import rent.vehicle.dto.list_request_dto.ListDevicesRequest;
 import rent.vehicle.enums.ConnectionStatus;
 import rent.vehicle.enums.DeviceModel;
 

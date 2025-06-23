@@ -6,17 +6,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import rent.vehicle.deviceserviceapp.service.DeviceService;
+import rent.vehicle.deviceserviceapp.service.SearchService;
 import rent.vehicle.dto.DeviceCreateUpdateDto;
 import rent.vehicle.dto.DeviceDto;
-import rent.vehicle.dto.ListDevicesRequest;
-
-import java.util.List;
+import rent.vehicle.dto.list_request_dto.ListDevicesRequest;
 
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/v1/devices")
 public class DeviceController {
     final DeviceService deviceService;
+    final SearchService searchService;
 
     @PostMapping
     public DeviceDto createDevice (@RequestBody DeviceCreateUpdateDto deviceCreateUpdateDto) {
@@ -33,7 +33,7 @@ public class DeviceController {
             @ModelAttribute ListDevicesRequest listDevicesRequest,
             @PageableDefault (size = 2)
             Pageable pageable) {
-        return deviceService.findDevicesByParams(listDevicesRequest, pageable);
+        return searchService.findDevicesByParams(listDevicesRequest, pageable);
     }
 
     @GetMapping("/list")

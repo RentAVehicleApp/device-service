@@ -10,10 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import rent.vehicle.deviceserviceapp.dao.DeviceConfigRepository;
 import rent.vehicle.deviceserviceapp.model.DeviceConfig;
-import rent.vehicle.deviceserviceapp.specification.DeviceConfigSpecification;
 import rent.vehicle.dto.DeviceConfigCreateUpdateDto;
 import rent.vehicle.dto.DeviceConfigDto;
-import rent.vehicle.dto.ListDeviceConfigsRequest;
 import rent.vehicle.exception.EntityNotFoundException;
 
 import java.util.List;
@@ -55,6 +53,11 @@ public class DeviceConfigServiceImpl implements DeviceConfigService {
                 .map(deviceConfig -> modelMapper.map(deviceConfig, DeviceConfigDto.class));
     }
 
+    @Override
+    public Page<DeviceConfig> findAllBySpec(Specification<DeviceConfig> spec, Pageable pageable) {
+        return deviceConfigRepository.findAll(spec, pageable);
+    }
+
     @Transactional
     @Override
     public DeviceConfigCreateUpdateDto updateDeviceConfig(long id, DeviceConfigCreateUpdateDto deviceConfigCreateUpdateDto) {
@@ -70,19 +73,6 @@ public class DeviceConfigServiceImpl implements DeviceConfigService {
         deviceConfigRepository.delete(deviceConfig);
     }
 
-
-    //    Критерий API и паттерн Specification
-    @Override
-    public Page<DeviceConfigDto> getListDevicesConfigByParam(
-            ListDeviceConfigsRequest listDeviceConfigsRequest,
-            Pageable pageable) {
-
-        Specification<DeviceConfig> spec = DeviceConfigSpecification.buildSpecification(listDeviceConfigsRequest);
-
-        Page<DeviceConfig> deviceConfigPage = deviceConfigRepository.findAll(spec, pageable);
-
-        return deviceConfigPage.map(deviceConfig -> modelMapper.map(deviceConfig, DeviceConfigDto.class));
-    }
 
 
 
