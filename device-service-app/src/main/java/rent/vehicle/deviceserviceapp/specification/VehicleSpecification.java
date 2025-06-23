@@ -3,9 +3,11 @@ package rent.vehicle.deviceserviceapp.specification;
 
 import org.springframework.data.jpa.domain.Specification;
 import rent.vehicle.deviceserviceapp.model.Vehicle;
-import rent.vehicle.dto.ListVehiclesRequest;
+import rent.vehicle.dto.list_request_dto.ListVehiclesRequest;
 import rent.vehicle.enums.Availability;
 import rent.vehicle.enums.VehicleModel;
+
+import java.util.Set;
 
 
 public class VehicleSpecification {
@@ -77,6 +79,15 @@ public class VehicleSpecification {
         };
     }
 
+    public static Specification<Vehicle> containSetDeviceId(Set<Long> deviceIds) {
+        return (root, query, criteriaBuilder) -> {
+            if (deviceIds == null || deviceIds.isEmpty()) {
+                return criteriaBuilder.conjunction();
+            }
+            return root.get("device").get("id").in(deviceIds);
+        };
+    }
+
     public static Specification<Vehicle> buildSpecification(ListVehiclesRequest request) {
         Specification<Vehicle> spec = (root, query, cb) -> cb.conjunction();
 
@@ -107,6 +118,10 @@ public class VehicleSpecification {
 
         if (request.getNodes() != null && !request.getNodes().trim().isEmpty()) {
             spec = spec.and(containNodes(request.getNodes()));
+        }
+
+        if (request.getDeviceIds() != null && !request.getDeviceIds().isEmpty()) {
+            spec = spec.and(containSetDeviceId(request.getDeviceIds()));
         }
 
         return spec;

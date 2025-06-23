@@ -2,9 +2,10 @@ package rent.vehicle.deviceserviceapp.service;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import rent.vehicle.deviceserviceapp.model.DeviceConfig;
 import rent.vehicle.dto.DeviceConfigCreateUpdateDto;
 import rent.vehicle.dto.DeviceConfigDto;
-import rent.vehicle.dto.ListDeviceConfigsRequest;
 
 import java.util.List;
 
@@ -21,5 +22,5 @@ public interface DeviceConfigService {
 
     Page<DeviceConfigDto> findAllDeviceConfig(Pageable pageable);
 
-    Page<DeviceConfigDto> getListDevicesConfigByParam(ListDeviceConfigsRequest listDeviceConfigsRequest, Pageable pageable);
+    Page<DeviceConfig> findAllBySpec(Specification<DeviceConfig> spec, Pageable pageable);
 }

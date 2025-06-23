@@ -11,10 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import rent.vehicle.deviceserviceapp.dao.DeviceRepository;
 import rent.vehicle.deviceserviceapp.model.Device;
 import rent.vehicle.deviceserviceapp.model.DeviceConfig;
-import rent.vehicle.deviceserviceapp.specification.DeviceSpecification;
 import rent.vehicle.dto.DeviceCreateUpdateDto;
 import rent.vehicle.dto.DeviceDto;
-import rent.vehicle.dto.ListDevicesRequest;
 import rent.vehicle.exception.DuplicateDeviceException;
 import rent.vehicle.exception.EntityNotFoundException;
 import rent.vehicle.exception.RelatedEntityInUseException;
@@ -55,17 +53,7 @@ public class DeviceServiceImpl implements DeviceService {
         return modelMapper.map(device, DeviceDto.class);
     }
 
-    @Override
-    public Page<DeviceDto> findDevicesByParams(
-            ListDevicesRequest listDevicesRequest,
-            Pageable pageable) {
 
-        Specification<Device> spec = DeviceSpecification.buildSpecification(listDevicesRequest);
-
-        Page<Device> devicePage = deviceRepository.findAll(spec, pageable);
-
-        return devicePage.map(device -> modelMapper.map(device, DeviceDto.class));
-    }
 
     @Transactional
     @Override
@@ -90,7 +78,7 @@ public class DeviceServiceImpl implements DeviceService {
 
         if (deviceCreateUpdateDto.getDeviceConfigId() != 0) {
             device.setDeviceConfig(modelMapper.map
-                    (deviceConfigService.findDeviceConfigById(deviceCreateUpdateDto.getDeviceConfigId() //todo is t ok modalmapper here?
+                    (deviceConfigService.findDeviceConfigById(deviceCreateUpdateDto.getDeviceConfigId()
                     ), DeviceConfig.class)
             );
 
@@ -118,6 +106,11 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceRepository.findAll(pageable)
                 .map(device -> modelMapper.map(device, DeviceDto.class));
 
+    }
+
+    @Override
+    public Page<Device> findAllBySpec(Specification<Device> spec, Pageable pageable) {
+        return deviceRepository.findAll(spec, pageable);
     }
 
 }
