@@ -42,6 +42,12 @@ public class VehicleServisImpl implements VehicleService {
             throw new DuplicateVehicleException("Vehicle with this serial number already exists");
         }
 
+        Point point = geometryFactory.createPoint(
+                new Coordinate(
+                        Double.parseDouble(vehicleCreateUpdateDto.getPointFromLatLonDto().getLongitude()),
+                        Double.parseDouble(vehicleCreateUpdateDto.getPointFromLatLonDto().getLatitude())
+                ));
+
         Vehicle vehicle = Vehicle.builder()
                 .vehicleModel(vehicleCreateUpdateDto.getVehicleModel())
                 .nodes(vehicleCreateUpdateDto.getNodes())
@@ -49,6 +55,7 @@ public class VehicleServisImpl implements VehicleService {
                 .device(modelMapper.map(
                         deviceService.findDeviceById(vehicleCreateUpdateDto.getDeviceId()), Device.class
                 ))
+                .point(point)
                 .build();
 
         return modelMapper.map(vehicleRepository.save(vehicle), VehicleDto.class);
