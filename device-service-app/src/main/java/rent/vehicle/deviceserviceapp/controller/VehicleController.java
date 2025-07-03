@@ -9,9 +9,9 @@ import org.springframework.web.bind.annotation.*;
 import rent.vehicle.constants.ApiPaths;
 import rent.vehicle.deviceserviceapp.service.SearchService;
 import rent.vehicle.deviceserviceapp.service.VehicleService;
+import rent.vehicle.dto.ListVehiclesRequest;
 import rent.vehicle.dto.VehicleCreateUpdateDto;
 import rent.vehicle.dto.VehicleDto;
-import rent.vehicle.dto.list_request_dto.ListVehiclesRequest;
 
 @RestController
 @RequiredArgsConstructor

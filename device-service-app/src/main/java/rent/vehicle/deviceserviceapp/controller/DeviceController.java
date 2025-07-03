@@ -10,7 +10,7 @@ import rent.vehicle.deviceserviceapp.service.DeviceService;
 import rent.vehicle.deviceserviceapp.service.SearchService;
 import rent.vehicle.dto.DeviceCreateUpdateDto;
 import rent.vehicle.dto.DeviceDto;
-import rent.vehicle.dto.list_request_dto.ListDevicesRequest;
+import rent.vehicle.dto.ListDevicesRequest;
 
 @RestController
 @RequiredArgsConstructor

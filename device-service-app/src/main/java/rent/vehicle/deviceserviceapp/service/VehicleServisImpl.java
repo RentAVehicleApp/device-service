@@ -1,6 +1,10 @@
 package rent.vehicle.deviceserviceapp.service;
 
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Page;
@@ -18,6 +22,7 @@ import rent.vehicle.dto.VehicleDto;
 import rent.vehicle.exception.DuplicateVehicleException;
 import rent.vehicle.exception.EntityNotFoundException;
 
+
 @Order(30)
 @Service
 @RequiredArgsConstructor
@@ -25,6 +30,8 @@ public class VehicleServisImpl implements VehicleService {
     final VehicleRepository vehicleRepository;
     final DeviceService deviceService;
     final ModelMapper modelMapper;
+
+    GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
     @Transactional
     @Override
@@ -69,8 +76,13 @@ public class VehicleServisImpl implements VehicleService {
             vehicle.setAvailability(vehicleCreateUpdateDto.getAvailability());
         }
 
-        if (vehicleCreateUpdateDto.getPoint() != null) {
-            vehicle.setPoint(vehicleCreateUpdateDto.getPoint());
+        if (vehicleCreateUpdateDto.getPointFromLatLonDto() != null) {
+            Point point = geometryFactory.createPoint(
+                    new Coordinate(
+                            Double.parseDouble(vehicleCreateUpdateDto.getPointFromLatLonDto().getLongitude()),
+                            Double.parseDouble(vehicleCreateUpdateDto.getPointFromLatLonDto().getLatitude())
+                    ));
+            vehicle.setPoint(point);
         }
 
         if (vehicleCreateUpdateDto.getBatteryStatus() != null) {

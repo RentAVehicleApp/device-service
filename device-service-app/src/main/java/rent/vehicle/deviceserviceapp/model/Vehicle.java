@@ -2,10 +2,10 @@ package rent.vehicle.deviceserviceapp.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.locationtech.jts.geom.Point;
 import rent.vehicle.enums.Availability;
 import rent.vehicle.enums.VehicleModel;
 
-import java.awt.*;
 import java.io.Serializable;
 
 @Entity
@@ -32,6 +32,9 @@ public class Vehicle implements Serializable {
 
     @Column (columnDefinition = "geometry(Point,4326)")
     private Point point;
+    // todo поискать у гугла варианты. Локейшен.
+    // Использовать сторонний сервис чтобы конвертировать адрес в локацию. Сделать эндпоинт - это шаг два
+    // Погуглить в каком виде я буду хранить локейшен - или сделать кастомный класс.  - это шаг один
 
     private int batteryStatus;
 

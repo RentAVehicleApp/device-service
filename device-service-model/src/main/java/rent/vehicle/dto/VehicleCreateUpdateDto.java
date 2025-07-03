@@ -4,8 +4,6 @@ import lombok.*;
 import rent.vehicle.enums.Availability;
 import rent.vehicle.enums.VehicleModel;
 
-import java.awt.*;
-
 @Getter
 @Setter
 @Builder
@@ -18,7 +16,7 @@ public class VehicleCreateUpdateDto {
     private VehicleModel vehicleModel;
     private long deviceId;
     private Availability availability;
-    private Point point;
+    private PointFromLatLonDto pointFromLatLonDto;
     private Integer batteryStatus;
     private String nodes;
 }

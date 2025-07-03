@@ -13,12 +13,7 @@ import rent.vehicle.deviceserviceapp.model.Vehicle;
 import rent.vehicle.deviceserviceapp.specification.DeviceConfigSpecification;
 import rent.vehicle.deviceserviceapp.specification.DeviceSpecification;
 import rent.vehicle.deviceserviceapp.specification.VehicleSpecification;
-import rent.vehicle.dto.DeviceConfigDto;
-import rent.vehicle.dto.DeviceDto;
-import rent.vehicle.dto.VehicleDto;
-import rent.vehicle.dto.list_request_dto.ListDeviceConfigsRequest;
-import rent.vehicle.dto.list_request_dto.ListDevicesRequest;
-import rent.vehicle.dto.list_request_dto.ListVehiclesRequest;
+import rent.vehicle.dto.*;
 
 import java.util.stream.Collectors;
 

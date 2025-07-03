@@ -1,10 +1,9 @@
-package rent.vehicle.dto.list_request_dto;
+package rent.vehicle.dto;
 
 import lombok.*;
 import rent.vehicle.enums.Availability;
 import rent.vehicle.enums.VehicleModel;
 
-import java.awt.*;
 import java.util.Set;
 
 @Getter
@@ -17,7 +16,6 @@ public class ListVehiclesRequest {
     private String registrationNumberPart;
     private VehicleModel vehicleModel;
     private Availability availability;
-    private Point point;
     private Integer batteryStatusMin;
     private Integer batteryStatusMax;
     private String nodes;
