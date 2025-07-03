@@ -14,4 +14,8 @@ WORKDIR /app
 # Копируем итоговый JAR (замени путь и имя JAR при необходимости)
 COPY --from=builder /app/device-service-app/target/device-service-app-0.0.1-SNAPSHOT.jar app.jar
 
-CMD ["java", "-jar", "app.jar"]
+CMD ["sh", "-c", "java -jar app.jar \
+  --spring.datasource.url=$AIVEN_URI \
+  --spring.datasource.username=$AIVEN_NAME \
+  --spring.datasource.password=$AIVEN_PASS \
+  --server.port=$PORT"]
