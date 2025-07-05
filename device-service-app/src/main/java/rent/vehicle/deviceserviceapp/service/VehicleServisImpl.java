@@ -1,10 +1,6 @@
 package rent.vehicle.deviceserviceapp.service;
 
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.GeometryFactory;
-import org.locationtech.jts.geom.Point;
-import org.locationtech.jts.geom.PrecisionModel;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Page;
@@ -29,9 +25,9 @@ import rent.vehicle.exception.EntityNotFoundException;
 public class VehicleServisImpl implements VehicleService {
     final VehicleRepository vehicleRepository;
     final DeviceService deviceService;
+    PointService pointService;
     final ModelMapper modelMapper;
 
-    GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
 
     @Transactional
     @Override
@@ -42,12 +38,6 @@ public class VehicleServisImpl implements VehicleService {
             throw new DuplicateVehicleException("Vehicle with this serial number already exists");
         }
 
-        Point point = geometryFactory.createPoint(
-                new Coordinate(
-                        Double.parseDouble(vehicleCreateUpdateDto.getPointFromLatLonDto().getLongitude()),
-                        Double.parseDouble(vehicleCreateUpdateDto.getPointFromLatLonDto().getLatitude())
-                ));
-
         Vehicle vehicle = Vehicle.builder()
                 .vehicleModel(vehicleCreateUpdateDto.getVehicleModel())
                 .nodes(vehicleCreateUpdateDto.getNodes())
@@ -55,7 +45,7 @@ public class VehicleServisImpl implements VehicleService {
                 .device(modelMapper.map(
                         deviceService.findDeviceById(vehicleCreateUpdateDto.getDeviceId()), Device.class
                 ))
-                .point(point)
+                .point(pointService.getPointFromCoordinate(vehicleCreateUpdateDto))
                 .build();
 
         return modelMapper.map(vehicleRepository.save(vehicle), VehicleDto.class);
@@ -84,12 +74,7 @@ public class VehicleServisImpl implements VehicleService {
         }
 
         if (vehicleCreateUpdateDto.getPointFromLatLonDto() != null) {
-            Point point = geometryFactory.createPoint(
-                    new Coordinate(
-                            Double.parseDouble(vehicleCreateUpdateDto.getPointFromLatLonDto().getLongitude()),
-                            Double.parseDouble(vehicleCreateUpdateDto.getPointFromLatLonDto().getLatitude())
-                    ));
-            vehicle.setPoint(point);
+            vehicle.setPoint(pointService.getPointFromCoordinate(vehicleCreateUpdateDto));
         }
 
         if (vehicleCreateUpdateDto.getBatteryStatus() != null) {

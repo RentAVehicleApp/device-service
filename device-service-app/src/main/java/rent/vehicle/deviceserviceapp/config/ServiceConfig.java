@@ -1,11 +1,19 @@
 package rent.vehicle.deviceserviceapp.config;
 
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.Point;
+import org.locationtech.jts.geom.PrecisionModel;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.PropertyMap;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import rent.vehicle.deviceserviceapp.model.Vehicle;
+import rent.vehicle.dto.PointFromLatLonDto;
+import rent.vehicle.dto.VehicleDto;
 
 @Configuration
 public class ServiceConfig {
@@ -17,8 +25,44 @@ public class ServiceConfig {
                 .setFieldMatchingEnabled(true)
                 .setFieldAccessLevel(org.modelmapper.config.Configuration.AccessLevel.PRIVATE)
                 .setMatchingStrategy(MatchingStrategies.STRICT);
+
+        modelMapper.addMappings(new PropertyMap<Vehicle, VehicleDto>() {
+            @Override
+            protected void configure() {
+                using(ctx -> {
+                    Point point = (Point) ctx.getSource();
+                    if (point == null) {
+                        return null;
+                    }
+                    return PointFromLatLonDto.builder()
+                            .longitude(String.valueOf(point.getX()))
+                            .latitude(String.valueOf(point.getY()))
+                            .build();
+                }).map(source.getPoint(), destination.getPointFromLatLonDto());
+            }
+        });
+
+        modelMapper.addMappings(new PropertyMap<VehicleDto, Vehicle>() {
+            @Override
+            protected void configure() {
+                using(ctx -> {
+                    PointFromLatLonDto pointFromLatLonDto = (PointFromLatLonDto) ctx.getSource();
+                    if (pointFromLatLonDto == null) {
+                        return null;
+                    }
+                    GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(), 4326);
+                    Point point = geometryFactory.createPoint(
+                            new Coordinate(
+                                    Double.parseDouble(pointFromLatLonDto.getLongitude()),
+                                    Double.parseDouble(pointFromLatLonDto.getLatitude())
+                            ));
+                    return point;
+                }).map(source.getPointFromLatLonDto(), destination.getPoint());
+            }
+        });
         return modelMapper;
     }
+
 
     @Bean
     public WebMvcConfigurer corsConfigurer() {
