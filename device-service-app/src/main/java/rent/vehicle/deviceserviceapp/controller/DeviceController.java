@@ -37,6 +37,12 @@ public class DeviceController {
         return searchService.findDevicesByParams(listDevicesRequest, pageable);
     }
 
+    @GetMapping(ApiPaths.WITHOUT_VEHICLE)
+    public Page<DeviceDto> findDevicesWithoutVehicle(@PageableDefault(size = 2)
+                                                     Pageable pageable) {
+        return searchService.findDevicesWithoutVehicle(pageable);
+    }
+
     @GetMapping(ApiPaths.PATH_LIST)
     public Page<DeviceDto> findAllDevices (
             @PageableDefault (size = 2)

@@ -19,4 +19,6 @@ public interface DeviceService {
     Page<DeviceDto> findAllDevices(Pageable pageable);
 
     Page<Device> findAllBySpec(Specification<Device> spec, Pageable pageable);
+
+    Page<Device> findDevicesWithoutVehicle(Pageable pageable);
 }

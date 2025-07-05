@@ -8,4 +8,5 @@ public enum ApiPaths {
     public static final String PATH_ID = "/{id}";
     public static final String PATH_LIST = "/list";
     public static final String PATH_SEARCH = "/search";
+    public static final String WITHOUT_VEHICLE = "/without-vehicle";
 }

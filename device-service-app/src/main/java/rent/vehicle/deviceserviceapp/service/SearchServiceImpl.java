@@ -68,7 +68,6 @@ public class SearchServiceImpl implements SearchService {
             ListVehiclesRequest listVehiclesRequest,
             Pageable pageable) {
 
-        System.out.println(listVehiclesRequest.getListDevicesRequest());
         if (listVehiclesRequest.getListDevicesRequest() != null) {
             Pageable devicePageable = PageRequest.of(
                     pageable.getPageNumber(),
@@ -89,5 +88,13 @@ public class SearchServiceImpl implements SearchService {
         Page<Vehicle> vehiclePage = vehicleService.findAllBySpec(spec, pageable);
 
         return vehiclePage.map(vehicle -> modelMapper.map(vehicle, VehicleDto.class));
+    }
+
+    @Override
+    public Page<DeviceDto> findDevicesWithoutVehicle(Pageable pageable) {
+
+        Page<Device> devicePage = deviceService.findDevicesWithoutVehicle(pageable);
+
+        return devicePage.map(device -> modelMapper.map(device, DeviceDto.class));
     }
 }

@@ -113,4 +113,9 @@ public class DeviceServiceImpl implements DeviceService {
         return deviceRepository.findAll(spec, pageable);
     }
 
+    @Override
+    public Page<Device> findDevicesWithoutVehicle(Pageable pageable) {
+        return deviceRepository.findDevicesWithoutVehicle(pageable);
+    }
+
 }

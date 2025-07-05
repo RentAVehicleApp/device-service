@@ -10,4 +10,6 @@ public interface SearchService {
     Page<DeviceDto> findDevicesByParams(ListDevicesRequest listDevicesRequest, Pageable pageable);
 
     Page<VehicleDto> findVehicleByParams(ListVehiclesRequest listVehiclesRequest, Pageable pageable);
+
+    Page<DeviceDto> findDevicesWithoutVehicle(Pageable pageable);
 }
