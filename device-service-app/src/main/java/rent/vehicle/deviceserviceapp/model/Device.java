@@ -27,7 +27,7 @@ public class Device implements Serializable {
 
     private String serialNumber;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     private DeviceConfig deviceConfig;
 
 

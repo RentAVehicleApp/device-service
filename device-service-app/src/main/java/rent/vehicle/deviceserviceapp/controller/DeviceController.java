@@ -38,8 +38,7 @@ public class DeviceController {
     }
 
     @GetMapping(ApiPaths.WITHOUT_VEHICLE)
-    public Page<DeviceDto> findDevicesWithoutVehicle(@PageableDefault(size = 2)
-                                                     Pageable pageable) {
+    public Page<DeviceDto> findDevicesWithoutVehicle(Pageable pageable) {
         return searchService.findDevicesWithoutVehicle(pageable);
     }
 
@@ -59,7 +58,5 @@ public class DeviceController {
     public void removeDevice (@PathVariable long id) {
         deviceService.removeDevice (id);
     }
-
-
 
 }
