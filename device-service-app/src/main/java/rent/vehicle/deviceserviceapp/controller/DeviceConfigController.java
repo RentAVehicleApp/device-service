@@ -26,7 +26,7 @@ public class DeviceConfigController {
     }
 
     @PutMapping(ApiPaths.PATH_ID)
-    public DeviceConfigCreateUpdateDto updateDeviceConfig (@PathVariable long id, @RequestBody DeviceConfigCreateUpdateDto deviceConfigCreateUpdateDto) {
+    public DeviceConfigDto updateDeviceConfig(@PathVariable long id, @RequestBody DeviceConfigCreateUpdateDto deviceConfigCreateUpdateDto) {
         return deviceConfigService.updateDeviceConfig (id, deviceConfigCreateUpdateDto);
     }
 

@@ -14,7 +14,7 @@ public interface DeviceConfigService {
 
     DeviceConfigDto findDeviceConfigById(long id);
 
-    DeviceConfigCreateUpdateDto updateDeviceConfig(long id, DeviceConfigCreateUpdateDto deviceConfigCreateUpdateDto);
+    DeviceConfigDto updateDeviceConfig(long id, DeviceConfigCreateUpdateDto deviceConfigCreateUpdateDto);
 
     void removeDeviceConfig(long id);
 

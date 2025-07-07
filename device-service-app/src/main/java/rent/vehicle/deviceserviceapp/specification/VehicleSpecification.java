@@ -126,4 +126,5 @@ public class VehicleSpecification {
 
         return spec;
     }
+    //todo посмотреть как он генерирует query в логах.
 }

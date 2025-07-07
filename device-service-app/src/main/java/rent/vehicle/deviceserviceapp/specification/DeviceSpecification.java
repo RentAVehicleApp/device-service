@@ -101,4 +101,6 @@ public class DeviceSpecification {
 
         return spec;
     }
+
+
 }
