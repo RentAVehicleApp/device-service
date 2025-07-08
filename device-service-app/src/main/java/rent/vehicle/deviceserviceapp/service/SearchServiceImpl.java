@@ -3,7 +3,6 @@ package rent.vehicle.deviceserviceapp.service;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
@@ -14,8 +13,6 @@ import rent.vehicle.deviceserviceapp.specification.DeviceConfigSpecification;
 import rent.vehicle.deviceserviceapp.specification.DeviceSpecification;
 import rent.vehicle.deviceserviceapp.specification.VehicleSpecification;
 import rent.vehicle.dto.*;
-
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -42,18 +39,18 @@ public class SearchServiceImpl implements SearchService {
             ListDevicesRequest listDevicesRequest,
             Pageable pageable) {
 
-        if (listDevicesRequest.getListDeviceConfigsRequest() != null) {
-            Pageable devicePageable = PageRequest.of(
-                    pageable.getPageNumber(),
-                    pageable.getPageSize()
-            );
-            Page<DeviceConfigDto> deviceConfigDtoPage = getListDevicesConfigByParam(listDevicesRequest.getListDeviceConfigsRequest(), devicePageable);
-            listDevicesRequest.setDeviceConfigIds(
-                    deviceConfigDtoPage.stream()
-                            .map(DeviceConfigDto::getId)
-                            .collect(Collectors.toSet())
-            );
-        }
+//        if (listDevicesRequest.getListDeviceConfigsRequest() != null) {
+//            Pageable devicePageable = PageRequest.of(
+//                    pageable.getPageNumber(),
+//                    pageable.getPageSize()
+//            );
+//            Page<DeviceConfigDto> deviceConfigDtoPage = getListDevicesConfigByParam(listDevicesRequest.getListDeviceConfigsRequest(), devicePageable);
+//            listDevicesRequest.setDeviceConfigIds(
+//                    deviceConfigDtoPage.stream()
+//                            .map(DeviceConfigDto::getId)
+//                            .collect(Collectors.toSet())
+//            );
+//        }
 
         Specification<Device> spec = DeviceSpecification.buildSpecification(listDevicesRequest);
 
@@ -68,20 +65,20 @@ public class SearchServiceImpl implements SearchService {
             ListVehiclesRequest listVehiclesRequest,
             Pageable pageable) {
 
-        if (listVehiclesRequest.getListDevicesRequest() != null) {
-            Pageable devicePageable = PageRequest.of(
-                    pageable.getPageNumber(),
-                    pageable.getPageSize()
-            );
-
-            Page<DeviceDto> deviceDtoPage = findDevicesByParams(listVehiclesRequest.getListDevicesRequest(), devicePageable);
-            listVehiclesRequest.setDeviceIds(
-                    deviceDtoPage.stream()
-                            .map(DeviceDto::getId)
-                            .peek(id -> System.out.println("Device ID: " + id))
-                            .collect(Collectors.toSet())
-            );
-        }
+//        if (listVehiclesRequest.getListDevicesRequest() != null) {
+//            Pageable devicePageable = PageRequest.of(
+//                    pageable.getPageNumber(),
+//                    pageable.getPageSize()
+//            );
+//
+//            Page<DeviceDto> deviceDtoPage = findDevicesByParams(listVehiclesRequest.getListDevicesRequest(), devicePageable);
+//            listVehiclesRequest.setDeviceIds(
+//                    deviceDtoPage.stream()
+//                            .map(DeviceDto::getId)
+//                            .peek(id -> System.out.println("Device ID: " + id))
+//                            .collect(Collectors.toSet())
+//            );
+//        }
 
         Specification<Vehicle> spec = VehicleSpecification.buildSpecification(listVehiclesRequest);
 
