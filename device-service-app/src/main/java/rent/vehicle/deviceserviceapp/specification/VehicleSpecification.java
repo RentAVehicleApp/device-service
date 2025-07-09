@@ -107,9 +107,9 @@ public class VehicleSpecification {
             spec = spec.and(equalAvailability(request.getAvailability()));
         }
         //TODO Search by point
-//        if (request.getPoint() != null) {
+        if (request.getLatitude() != 0 && request.getLongitude() != 0 && request.getRadius() != 0) {
 //            spec = spec.and(equalPoint(request.getPoint()));
-//        }
+        }
 
         int min = request.getBatteryStatusMin() != null ? request.getBatteryStatusMin() : 0;
         int max = request.getBatteryStatusMax() != null ? request.getBatteryStatusMax() : 100;

@@ -14,6 +14,9 @@ import java.util.Set;
 public class ListVehiclesRequest {
     private String registrationNumber;
     private String registrationNumberPart;
+    private double latitude;
+    private double longitude;
+    private double radius;
     private VehicleModel vehicleModel;
     private Availability availability;
     private Integer batteryStatusMin;

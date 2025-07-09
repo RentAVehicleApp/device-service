@@ -22,7 +22,7 @@ public class Vehicle implements Serializable {
 
     private String registrationNumber;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     private Device device;
 
     @Column()
