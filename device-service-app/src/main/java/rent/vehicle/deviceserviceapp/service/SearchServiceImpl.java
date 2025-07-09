@@ -1,5 +1,6 @@
 package rent.vehicle.deviceserviceapp.service;
 
+import jakarta.persistence.criteria.Expression;
 import lombok.RequiredArgsConstructor;
 import org.locationtech.jts.geom.Point;
 import org.modelmapper.ModelMapper;
@@ -104,11 +105,26 @@ public class SearchServiceImpl implements SearchService {
     @Override
     public Page<VehicleDto> findNearbyVehicles(PointFromLatLonDto pointFromLatLonDto, long radiusMeters, Pageable pageable) {
 
-        Point point = pointServiceImpl.getPointFromCoordinate(pointFromLatLonDto);
+        Point targetPoint = pointServiceImpl.getPointFromCoordinate(pointFromLatLonDto);
+        targetPoint.setSRID(4326);
 
-        Page<Vehicle> vehiclePage = vehicleService.findNearbyVehicles(point, radiusMeters, pageable);
+        Specification<Vehicle> spec = (root, query, cb) -> {
+            // ST_DistanceSphere(root.point, POINT(long, lat)) <= radiusMeters
+            Expression<Double> distance = cb.function("ST_DistanceSphere", Double.class,
+                    root.get("point"),
+                    cb.function("ST_MakePoint", Object.class,
+                            cb.literal(pointFromLatLonDto.getLongitude()),
+                            cb.literal(pointFromLatLonDto.getLatitude())
+                    )
+            );
+
+            return cb.lessThanOrEqualTo(distance, cb.literal((double) radiusMeters));
+        };
+
+        Page<Vehicle> vehiclePage = vehicleService.findAllBySpec(spec, pageable);
 
         return vehiclePage.map(vehicle -> modelMapper.map(vehicle, VehicleDto.class));
     }
+
 
 }

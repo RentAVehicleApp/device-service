@@ -16,10 +16,10 @@ public interface VehicleRepository extends JpaRepository<Vehicle,Long> {
 
     Page<Vehicle> findAll(Specification<Vehicle> spec, Pageable pageable);
 
-    @Query("SELECT v FROM Vehicle v WHERE distance(v.point, :targetPoint) <= :radiusMeters ORDER BY distance(v.point, :targetPoint)")
+    @Query("SELECT v FROM Vehicle v WHERE distance(v.point, :targetPoint) <= :radius ORDER BY distance(v.point, :targetPoint)")
     Page<Vehicle> findNearbyVehicles(
             @Param("targetPoint") Point targetPoint,
-            @Param("radiusMeters") long radiusMeters,
+            @Param("radius") long radius,
             Pageable pageable
     );
 }
