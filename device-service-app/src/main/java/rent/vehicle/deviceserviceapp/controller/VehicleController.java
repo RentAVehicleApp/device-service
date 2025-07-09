@@ -10,6 +10,7 @@ import rent.vehicle.constants.ApiPaths;
 import rent.vehicle.deviceserviceapp.service.SearchService;
 import rent.vehicle.deviceserviceapp.service.VehicleService;
 import rent.vehicle.dto.ListVehiclesRequest;
+import rent.vehicle.dto.PointFromLatLonDto;
 import rent.vehicle.dto.VehicleCreateUpdateDto;
 import rent.vehicle.dto.VehicleDto;
 
@@ -50,6 +51,15 @@ public class VehicleController {
             Pageable pageable
     ) {
         return searchService.findVehicleByParams(listVehiclesRequest, pageable);
+    }
+
+    @GetMapping(ApiPaths.PATH_NEARBY)
+    public Page<VehicleDto> findNearbyVehicles(
+            @ModelAttribute PointFromLatLonDto pointFromLatLonDto,
+            @RequestParam long radiusMeters,
+            @PageableDefault() Pageable pageable
+    ) {
+        return searchService.findNearbyVehicles(pointFromLatLonDto, radiusMeters, pageable);
     }
 
     @PutMapping(ApiPaths.PATH_ID)

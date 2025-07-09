@@ -1,5 +1,6 @@
 package rent.vehicle.deviceserviceapp.service;
 
+import org.locationtech.jts.geom.Point;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -19,4 +20,6 @@ public interface VehicleService {
     Page<VehicleDto> findAllVehicles(Pageable pageable);
 
     Page<Vehicle> findAllBySpec(Specification<Vehicle> spec, Pageable pageable);
+
+    Page<Vehicle> findNearbyVehicles(Point point, long radiusMeters, Pageable pageable);
 }

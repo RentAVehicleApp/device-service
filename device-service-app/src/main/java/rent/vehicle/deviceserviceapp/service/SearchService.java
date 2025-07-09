@@ -12,4 +12,6 @@ public interface SearchService {
     Page<VehicleDto> findVehicleByParams(ListVehiclesRequest listVehiclesRequest, Pageable pageable);
 
     Page<DeviceDto> findDevicesWithoutVehicle(Pageable pageable);
+
+    Page<VehicleDto> findNearbyVehicles(PointFromLatLonDto pointFromLatLonDto, long radiusMeters, Pageable pageable);
 }

@@ -1,6 +1,7 @@
 package rent.vehicle.deviceserviceapp.service;
 
 import lombok.RequiredArgsConstructor;
+import org.locationtech.jts.geom.Point;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Page;
@@ -45,7 +46,7 @@ public class VehicleServisImpl implements VehicleService {
                 .device(modelMapper.map(
                         deviceService.findDeviceById(vehicleCreateUpdateDto.getDeviceId()), Device.class
                 ))
-                .point(pointService.getPointFromCoordinate(vehicleCreateUpdateDto))
+                .point(pointService.getPointFromCoordinate(vehicleCreateUpdateDto.getPointFromLatLonDto()))
                 .build();
 
         return modelMapper.map(vehicleRepository.save(vehicle), VehicleDto.class);
@@ -74,7 +75,7 @@ public class VehicleServisImpl implements VehicleService {
         }
 
         if (vehicleCreateUpdateDto.getPointFromLatLonDto() != null) {
-            vehicle.setPoint(pointService.getPointFromCoordinate(vehicleCreateUpdateDto));
+            vehicle.setPoint(pointService.getPointFromCoordinate(vehicleCreateUpdateDto.getPointFromLatLonDto()));
         }
 
         if (vehicleCreateUpdateDto.getBatteryStatus() != null) {
@@ -110,6 +111,11 @@ public class VehicleServisImpl implements VehicleService {
     @Override
     public Page<Vehicle> findAllBySpec(Specification<Vehicle> spec, Pageable pageable) {
         return vehicleRepository.findAll(spec, pageable);
+    }
+
+    @Override
+    public Page<Vehicle> findNearbyVehicles(Point point, long radiusMeters, Pageable pageable) {
+        return vehicleRepository.findNearbyVehicles(point, radiusMeters, pageable);
     }
 
 
