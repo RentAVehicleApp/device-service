@@ -11,13 +11,13 @@ import rent.vehicle.deviceserviceapp.model.Device;
 public interface DeviceRepository extends JpaRepository<Device,Long> {
     boolean existsBySerialNumber(String serialNumber);
 
-    @EntityGraph(attributePaths = {"vehicle", "deviceConfig"})
+    @EntityGraph(attributePaths = {"deviceConfig"})
     Page<Device> findAll(Pageable pageable);
 
-    @EntityGraph(attributePaths = {"vehicle", "deviceConfig"})
+    @EntityGraph(attributePaths = {"deviceConfig"})
     Page<Device> findAll(Specification<Device> spec, Pageable pageable);
 
-    @EntityGraph(attributePaths = {"vehicle", "deviceConfig"})
+    @EntityGraph(attributePaths = {"deviceConfig"})
     @Query("SELECT d FROM Device d WHERE d.id NOT IN " +
             "(SELECT v.device.id FROM Vehicle v WHERE v.device IS NOT NULL)")
     Page<Device> findDevicesWithoutVehicle(Pageable pageable);
