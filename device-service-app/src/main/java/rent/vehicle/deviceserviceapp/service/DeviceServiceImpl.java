@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import rent.vehicle.deviceserviceapp.config.CustomPage;
 import rent.vehicle.deviceserviceapp.dao.DeviceRepository;
 import rent.vehicle.deviceserviceapp.model.Device;
 import rent.vehicle.deviceserviceapp.model.DeviceConfig;
@@ -16,6 +17,8 @@ import rent.vehicle.dto.DeviceDto;
 import rent.vehicle.exception.DuplicateDeviceException;
 import rent.vehicle.exception.EntityNotFoundException;
 import rent.vehicle.exception.RelatedEntityInUseException;
+
+import java.util.List;
 
 @Order(20)
 @Service
@@ -101,21 +104,34 @@ public class DeviceServiceImpl implements DeviceService {
         deviceRepository.delete(device);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Page<DeviceDto> findAllDevices(Pageable pageable) {
-        return deviceRepository.findAll(pageable)
-                .map(device -> modelMapper.map(device, DeviceDto.class));
+    public CustomPage<DeviceDto> findAllDevices(Pageable pageable) {
+        Page<Device> devicePage = deviceRepository.findAll(pageable);
+        List<DeviceDto> dtoContent = devicePage.getContent().stream()
+                .map(device -> modelMapper.map(device, DeviceDto.class))
+                .toList();
 
+        return new CustomPage<>(dtoContent, devicePage.getNumber(), devicePage.getSize(), devicePage.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<Device> findAllBySpec(Specification<Device> spec, Pageable pageable) {
         return deviceRepository.findAll(spec, pageable);
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public Page<Device> findDevicesWithoutVehicle(Pageable pageable) {
-        return deviceRepository.findDevicesWithoutVehicle(pageable);
+    public CustomPage<DeviceDto> findDevicesWithoutVehicle(Pageable pageable) {
+
+        Page<Device> devicePage = deviceRepository.findDevicesWithoutVehicle(pageable);
+
+        List<DeviceDto> dtoContent = devicePage.getContent().stream()
+                .map(device -> modelMapper.map(device, DeviceDto.class))
+                .toList();
+
+        return new CustomPage<>(dtoContent, devicePage.getNumber(), devicePage.getSize(), devicePage.getTotalElements());
     }
 
 }

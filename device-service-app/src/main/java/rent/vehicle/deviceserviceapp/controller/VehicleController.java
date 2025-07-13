@@ -1,12 +1,12 @@
 package rent.vehicle.deviceserviceapp.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import rent.vehicle.constants.ApiPaths;
+import rent.vehicle.deviceserviceapp.config.CustomPage;
 import rent.vehicle.deviceserviceapp.service.SearchService;
 import rent.vehicle.deviceserviceapp.service.VehicleService;
 import rent.vehicle.dto.ListVehiclesRequest;
@@ -32,7 +32,7 @@ public class VehicleController {
     }
 
     @GetMapping(ApiPaths.PATH_LIST)
-    public Page<VehicleDto> findAllVehicles (
+    public CustomPage<VehicleDto> findAllVehicles(
             @PageableDefault(
                     size = 2,
                     direction = Sort.Direction.DESC
@@ -43,7 +43,7 @@ public class VehicleController {
     }
 
     @GetMapping(ApiPaths.PATH_SEARCH)
-    public Page<VehicleDto> findVehicleByParams (
+    public CustomPage<VehicleDto> findVehicleByParams(
             @ModelAttribute ListVehiclesRequest listVehiclesRequest,
             @PageableDefault(
                     size = 2,
@@ -55,7 +55,7 @@ public class VehicleController {
     }
 
     @GetMapping(ApiPaths.PATH_NEARBY)
-    public Page<VehicleDto> findNearbyVehicles(
+    public CustomPage<VehicleDto> findNearbyVehicles(
             @ModelAttribute PointFromLatLonDto pointFromLatLonDto,
             @RequestParam long radiusMeters,
             @PageableDefault() Pageable pageable

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import rent.vehicle.deviceserviceapp.config.CustomPage;
 import rent.vehicle.deviceserviceapp.dao.DeviceConfigRepository;
 import rent.vehicle.deviceserviceapp.model.DeviceConfig;
 import rent.vehicle.dto.DeviceConfigCreateUpdateDto;
@@ -43,16 +44,16 @@ public class DeviceConfigServiceImpl implements DeviceConfigService {
         return modelMapper.map(deviceConfig, DeviceConfigDto.class);
     }
 
-    @Override
-    public List<DeviceConfigCreateUpdateDto> getListDevicesConfig() {
-        return List.of();
-    }
-
     @Transactional (readOnly = true)
     @Override
-    public Page<DeviceConfigDto> findAllDeviceConfig(Pageable pageable) {
-        return deviceConfigRepository.findAll(pageable)
-                .map(deviceConfig -> modelMapper.map(deviceConfig, DeviceConfigDto.class));
+    public CustomPage<DeviceConfigDto> findAllDeviceConfig(Pageable pageable) {
+        Page<DeviceConfig> deviceConfigPage = deviceConfigRepository.findAll(pageable);
+
+        List<DeviceConfigDto> dtoContent = deviceConfigPage.getContent().stream()
+                .map(deviceConfig -> modelMapper.map(deviceConfig, DeviceConfigDto.class))
+                .toList();
+
+        return new CustomPage<>(dtoContent, deviceConfigPage.getNumber(), deviceConfigPage.getSize(), deviceConfigPage.getTotalElements());
     }
 
     @Override

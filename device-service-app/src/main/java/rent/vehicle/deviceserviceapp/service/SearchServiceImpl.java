@@ -9,6 +9,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import rent.vehicle.deviceserviceapp.config.CustomPage;
 import rent.vehicle.deviceserviceapp.model.Device;
 import rent.vehicle.deviceserviceapp.model.DeviceConfig;
 import rent.vehicle.deviceserviceapp.model.Vehicle;
@@ -17,6 +18,7 @@ import rent.vehicle.deviceserviceapp.specification.DeviceSpecification;
 import rent.vehicle.deviceserviceapp.specification.VehicleSpecification;
 import rent.vehicle.dto.*;
 
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,30 +32,26 @@ public class SearchServiceImpl implements SearchService {
     private final PointServiceImpl pointServiceImpl;
 
     @Override
-    public Page<DeviceConfigDto> getListDevicesConfigByParam(
+    public CustomPage<DeviceConfigDto> findDevicesConfigByParam(
             ListDeviceConfigsRequest listDeviceConfigsRequest,
             Pageable pageable) {
 
         Specification<DeviceConfig> spec = DeviceConfigSpecification.buildSpecification(listDeviceConfigsRequest);
 
-        Page<DeviceConfig> deviceConfigPage = deviceConfigService.findAllBySpec(spec, pageable);
-
-        return deviceConfigPage.map(deviceConfig -> modelMapper.map(deviceConfig, DeviceConfigDto.class));
+        return getDeviceConfigDtos(pageable, spec);
     }
 
     @Override
-    public Page<DeviceDto> findDevicesByParams(
-            ListDevicesRequest listDevicesRequest,
-            Pageable pageable) {
+    public CustomPage<DeviceDto> findDevicesByParams(ListDevicesRequest listDevicesRequest, Pageable pageable) {
 
         if (listDevicesRequest.getListDeviceConfigsRequest() != null) {
             Pageable devicePageable = PageRequest.of(
                     pageable.getPageNumber(),
                     pageable.getPageSize()
             );
-            Page<DeviceConfigDto> deviceConfigDtoPage = getListDevicesConfigByParam(listDevicesRequest.getListDeviceConfigsRequest(), devicePageable);
+            CustomPage<DeviceConfigDto> deviceConfigDtoCustomPage = findDevicesConfigByParam(listDevicesRequest.getListDeviceConfigsRequest(), devicePageable);
             listDevicesRequest.setDeviceConfigIds(
-                    deviceConfigDtoPage.stream()
+                    deviceConfigDtoCustomPage.stream()
                             .map(DeviceConfigDto::getId)
                             .collect(Collectors.toSet())
             );
@@ -61,14 +59,14 @@ public class SearchServiceImpl implements SearchService {
 
         Specification<Device> spec = DeviceSpecification.buildSpecification(listDevicesRequest);
 
-        Page<Device> devicePage = deviceService.findAllBySpec(spec, pageable);
-
-        return devicePage.map(device -> modelMapper.map(device, DeviceDto.class));
+        return getDeviceDtos(pageable, spec);
 
     }
 
+
+
     @Override
-    public Page<VehicleDto> findVehicleByParams(
+    public CustomPage<VehicleDto> findVehicleByParams(
             ListVehiclesRequest listVehiclesRequest,
             Pageable pageable) {
 
@@ -78,9 +76,9 @@ public class SearchServiceImpl implements SearchService {
                     pageable.getPageSize()
             );
 
-            Page<DeviceDto> deviceDtoPage = findDevicesByParams(listVehiclesRequest.getListDevicesRequest(), devicePageable);
+            CustomPage<DeviceDto> deviceDtoCustomPage = findDevicesByParams(listVehiclesRequest.getListDevicesRequest(), devicePageable);
             listVehiclesRequest.setDeviceIds(
-                    deviceDtoPage.stream()
+                    deviceDtoCustomPage.stream()
                             .map(DeviceDto::getId)
                             .peek(id -> System.out.println("Device ID: " + id))
                             .collect(Collectors.toSet())
@@ -89,21 +87,12 @@ public class SearchServiceImpl implements SearchService {
 
         Specification<Vehicle> spec = VehicleSpecification.buildSpecification(listVehiclesRequest);
 
-        Page<Vehicle> vehiclePage = vehicleService.findAllBySpec(spec, pageable);
+        return getVehicleDtos(pageable, spec);
 
-        return vehiclePage.map(vehicle -> modelMapper.map(vehicle, VehicleDto.class));
     }
 
     @Override
-    public Page<DeviceDto> findDevicesWithoutVehicle(Pageable pageable) {
-
-        Page<Device> devicePage = deviceService.findDevicesWithoutVehicle(pageable);
-
-        return devicePage.map(device -> modelMapper.map(device, DeviceDto.class));
-    }
-
-    @Override
-    public Page<VehicleDto> findNearbyVehicles(PointFromLatLonDto pointFromLatLonDto, long radiusMeters, Pageable pageable) {
+    public CustomPage<VehicleDto> findNearbyVehicles(PointFromLatLonDto pointFromLatLonDto, long radiusMeters, Pageable pageable) {
 
         Point targetPoint = pointServiceImpl.getPointFromCoordinate(pointFromLatLonDto);
         targetPoint.setSRID(4326);
@@ -121,9 +110,37 @@ public class SearchServiceImpl implements SearchService {
             return cb.lessThanOrEqualTo(distance, cb.literal((double) radiusMeters));
         };
 
-        Page<Vehicle> vehiclePage = vehicleService.findAllBySpec(spec, pageable);
+        return getVehicleDtos(pageable, spec);
+    }
 
-        return vehiclePage.map(vehicle -> modelMapper.map(vehicle, VehicleDto.class));
+    private CustomPage<VehicleDto> getVehicleDtos(Pageable pageable, Specification<Vehicle> spec) {
+        Page<Vehicle> devicePage = vehicleService.findAllBySpec(spec, pageable);
+
+        List<VehicleDto> dtoContent = devicePage.getContent().stream()
+                .map(v -> modelMapper.map(v, VehicleDto.class))
+                .collect(Collectors.toList());
+
+        return new CustomPage<VehicleDto>(dtoContent, devicePage.getNumber(), devicePage.getSize(), devicePage.getTotalElements());
+    }
+
+    private CustomPage<DeviceDto> getDeviceDtos(Pageable pageable, Specification<Device> spec) {
+        Page<Device> devicePage = deviceService.findAllBySpec(spec, pageable);
+
+        List<DeviceDto> dtoContent = devicePage.getContent().stream()
+                .map(device -> modelMapper.map(device, DeviceDto.class))
+                .collect(Collectors.toList());
+
+        return new CustomPage<DeviceDto>(dtoContent, devicePage.getNumber(), devicePage.getSize(), devicePage.getTotalElements());
+    }
+
+    private CustomPage<DeviceConfigDto> getDeviceConfigDtos(Pageable pageable, Specification<DeviceConfig> spec) {
+        Page<DeviceConfig> deviceConfigPage = deviceConfigService.findAllBySpec(spec, pageable);
+
+        List<DeviceConfigDto> deviceConfigDtoList = deviceConfigPage.getContent().stream()
+                .map(deviceConfig -> modelMapper.map(deviceConfig, DeviceConfigDto.class))
+                .collect(Collectors.toList());
+
+        return new CustomPage<DeviceConfigDto>(deviceConfigDtoList, deviceConfigPage.getNumber(), deviceConfigPage.getSize(), deviceConfigPage.getTotalElements());
     }
 
 

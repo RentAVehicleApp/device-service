@@ -1,7 +1,6 @@
 package rent.vehicle.deviceserviceapp.service;
 
 import lombok.RequiredArgsConstructor;
-import org.locationtech.jts.geom.Point;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.annotation.Order;
 import org.springframework.data.domain.Page;
@@ -11,6 +10,7 @@ import org.springframework.http.HttpStatusCode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
+import rent.vehicle.deviceserviceapp.config.CustomPage;
 import rent.vehicle.deviceserviceapp.dao.VehicleRepository;
 import rent.vehicle.deviceserviceapp.model.Device;
 import rent.vehicle.deviceserviceapp.model.Vehicle;
@@ -18,6 +18,8 @@ import rent.vehicle.dto.VehicleCreateUpdateDto;
 import rent.vehicle.dto.VehicleDto;
 import rent.vehicle.exception.DuplicateVehicleException;
 import rent.vehicle.exception.EntityNotFoundException;
+
+import java.util.List;
 
 
 @Order(30)
@@ -103,19 +105,19 @@ public class VehicleServisImpl implements VehicleService {
     }
 
     @Override
-    public Page<VehicleDto> findAllVehicles(Pageable pageable) {
-        return vehicleRepository.findAll(pageable)
-                .map(vehicle -> modelMapper.map(vehicle, VehicleDto.class));
+    public CustomPage<VehicleDto> findAllVehicles(Pageable pageable) {
+        Page<Vehicle> vehiclePage = vehicleRepository.findAll(pageable);
+
+        List<VehicleDto> dtoContent = vehiclePage.getContent().stream()
+                .map(v -> modelMapper.map(v, VehicleDto.class))
+                .toList();
+
+        return new CustomPage<>(dtoContent, vehiclePage.getNumber(), vehiclePage.getSize(), vehiclePage.getTotalElements());
     }
 
     @Override
     public Page<Vehicle> findAllBySpec(Specification<Vehicle> spec, Pageable pageable) {
         return vehicleRepository.findAll(spec, pageable);
-    }
-
-    @Override
-    public Page<Vehicle> findNearbyVehicles(Point point, long radiusMeters, Pageable pageable) {
-        return vehicleRepository.findNearbyVehicles(point, radiusMeters, pageable);
     }
 
 

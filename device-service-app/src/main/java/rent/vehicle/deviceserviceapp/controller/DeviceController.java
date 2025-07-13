@@ -1,11 +1,11 @@
 package rent.vehicle.deviceserviceapp.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 import rent.vehicle.constants.ApiPaths;
+import rent.vehicle.deviceserviceapp.config.CustomPage;
 import rent.vehicle.deviceserviceapp.service.DeviceService;
 import rent.vehicle.deviceserviceapp.service.SearchService;
 import rent.vehicle.dto.DeviceCreateUpdateDto;
@@ -30,7 +30,7 @@ public class DeviceController {
     }
 
     @GetMapping(ApiPaths.PATH_SEARCH)
-    public Page<DeviceDto> findDevicesByParams (
+    public CustomPage<DeviceDto> findDevicesByParams(
             @ModelAttribute ListDevicesRequest listDevicesRequest,
             @PageableDefault (size = 2)
             Pageable pageable) {
@@ -38,12 +38,12 @@ public class DeviceController {
     }
 
     @GetMapping(ApiPaths.WITHOUT_VEHICLE)
-    public Page<DeviceDto> findDevicesWithoutVehicle(Pageable pageable) {
-        return searchService.findDevicesWithoutVehicle(pageable);
+    public CustomPage<DeviceDto> findDevicesWithoutVehicle(Pageable pageable) {
+        return deviceService.findDevicesWithoutVehicle(pageable);
     }
 
     @GetMapping(ApiPaths.PATH_LIST)
-    public Page<DeviceDto> findAllDevices (
+    public CustomPage<DeviceDto> findAllDevices(
             @PageableDefault (size = 2)
             Pageable pageable) {
         return deviceService.findAllDevices(pageable);
