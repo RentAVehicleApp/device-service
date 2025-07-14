@@ -1,5 +1,6 @@
 package rent.vehicle.deviceserviceapp.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.annotation.Order;
@@ -25,6 +26,7 @@ import java.util.List;
 public class DeviceConfigServiceImpl implements DeviceConfigService {
     final DeviceConfigRepository deviceConfigRepository;
     final ModelMapper modelMapper;
+    private final EntityManager entityManager;
 
 
     @Transactional
@@ -34,7 +36,11 @@ public class DeviceConfigServiceImpl implements DeviceConfigService {
                 .name(deviceConfigCreateUpdateDto.getName())
                 .build();
 
-        return modelMapper.map(deviceConfigRepository.save(deviceConfig),  DeviceConfigDto.class);
+        DeviceConfigDto returnDto = modelMapper.map(deviceConfigRepository.save(deviceConfig), DeviceConfigDto.class);
+
+        entityManager.flush();
+        entityManager.clear();
+        return returnDto;
     }
 
     @Transactional(readOnly = true)
@@ -53,7 +59,10 @@ public class DeviceConfigServiceImpl implements DeviceConfigService {
                 .map(deviceConfig -> modelMapper.map(deviceConfig, DeviceConfigDto.class))
                 .toList();
 
-        return new CustomPage<>(dtoContent, deviceConfigPage.getNumber(), deviceConfigPage.getSize(), deviceConfigPage.getTotalElements());
+        CustomPage<DeviceConfigDto> returnDto = new CustomPage<>(dtoContent, deviceConfigPage.getNumber(), deviceConfigPage.getSize(), deviceConfigPage.getTotalElements());
+        entityManager.flush();
+        entityManager.clear();
+        return returnDto;
     }
 
     @Override

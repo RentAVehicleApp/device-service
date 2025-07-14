@@ -1,5 +1,6 @@
 package rent.vehicle.deviceserviceapp.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.annotation.Order;
@@ -25,11 +26,13 @@ import java.util.List;
 @Order(30)
 @Service
 @RequiredArgsConstructor
-public class VehicleServisImpl implements VehicleService {
-    final VehicleRepository vehicleRepository;
-    final DeviceService deviceService;
-    PointService pointService;
-    final ModelMapper modelMapper;
+public class VehicleServiceImpl implements VehicleService {
+    private final VehicleRepository vehicleRepository;
+    private final DeviceService deviceService;
+    private final PointService pointService;
+    private final ModelMapper modelMapper;
+    private final EntityManager entityManager;
+
 
 
     @Transactional
@@ -116,7 +119,11 @@ public class VehicleServisImpl implements VehicleService {
                 .map(v -> modelMapper.map(v, VehicleDto.class))
                 .toList();
 
-        return new CustomPage<>(dtoContent, vehiclePage.getNumber(), vehiclePage.getSize(), vehiclePage.getTotalElements());
+        CustomPage<VehicleDto> returnDto = new CustomPage<>(dtoContent, vehiclePage.getNumber(), vehiclePage.getSize(), vehiclePage.getTotalElements());
+
+        entityManager.flush();
+        entityManager.clear();
+        return returnDto;
     }
 
     @Transactional(readOnly = true)
