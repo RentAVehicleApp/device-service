@@ -54,12 +54,14 @@ public class VehicleServisImpl implements VehicleService {
         return modelMapper.map(vehicleRepository.save(vehicle), VehicleDto.class);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public VehicleDto findVehicleById(long id) {
         Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         return modelMapper.map(vehicle, VehicleDto.class);
     }
 
+    @Transactional
     @Override
     public VehicleDto updateVehicle(long id, VehicleCreateUpdateDto vehicleCreateUpdateDto) {
         Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404)));
@@ -98,12 +100,14 @@ public class VehicleServisImpl implements VehicleService {
         return modelMapper.map(vehicle, VehicleDto.class);
     }
 
+    @Transactional
     @Override
     public void removeVehicle(long id) {
         Vehicle vehicle = vehicleRepository.findById(id).orElseThrow(EntityNotFoundException::new);
         vehicleRepository.delete(vehicle);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public CustomPage<VehicleDto> findAllVehicles(Pageable pageable) {
         Page<Vehicle> vehiclePage = vehicleRepository.findAll(pageable);
@@ -115,6 +119,7 @@ public class VehicleServisImpl implements VehicleService {
         return new CustomPage<>(dtoContent, vehiclePage.getNumber(), vehiclePage.getSize(), vehiclePage.getTotalElements());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<Vehicle> findAllBySpec(Specification<Vehicle> spec, Pageable pageable) {
         return vehicleRepository.findAll(spec, pageable);
