@@ -16,7 +16,6 @@ import rent.vehicle.dto.DeviceCreateUpdateDto;
 import rent.vehicle.dto.DeviceDto;
 import rent.vehicle.exception.DuplicateDeviceException;
 import rent.vehicle.exception.EntityNotFoundException;
-import rent.vehicle.exception.RelatedEntityInUseException;
 
 import java.util.List;
 
@@ -95,12 +94,7 @@ public class DeviceServiceImpl implements DeviceService {
     @Override
     public void removeDevice(long id) {
         Device device = deviceRepository.findById(id).orElseThrow(EntityNotFoundException::new);
-
-        if (device.getDeviceConfig() != null) {
-            throw new RelatedEntityInUseException(
-                    "Невозможно удалить устройство. Сначала отвяжите его от транспортного средства."
-            );
-        }
+        deviceRepository.detachVehicles(device);
         deviceRepository.delete(device);
     }
 

@@ -74,6 +74,7 @@ public class DeviceConfigServiceImpl implements DeviceConfigService {
     public void removeDeviceConfig(long id) {
         DeviceConfig deviceConfig = deviceConfigRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatusCode.valueOf(404), "DeviceConfig with id " + id + " not found"));
+        deviceConfigRepository.detachDevices(deviceConfig);
         deviceConfigRepository.delete(deviceConfig);
     }
 

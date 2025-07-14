@@ -13,7 +13,7 @@ public class DeviceDto {
     private long id;
 //    @UniqueConstraint() //todo Unique
     private String serialNumber;
-    private DeviceConfigCreateUpdateDto deviceConfig;
+    private DeviceConfigDto deviceConfig;
     private DeviceModel deviceModel;
     private ConnectionStatus connectionStatus;
     private String nodes;

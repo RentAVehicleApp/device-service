@@ -38,7 +38,6 @@ public class VehicleController {
                     direction = Sort.Direction.DESC
             )
             Pageable pageable) {
-        System.out.println(pageable.toString());
         return vehicleService.findAllVehicles (pageable);
     }
 
