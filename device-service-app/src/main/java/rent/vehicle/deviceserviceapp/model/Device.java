@@ -1,5 +1,6 @@
 package rent.vehicle.deviceserviceapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import rent.vehicle.enums.ConnectionStatus;
@@ -28,6 +29,7 @@ public class Device implements Serializable {
     private String serialNumber;
 
     @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private DeviceConfig deviceConfig;
 
 

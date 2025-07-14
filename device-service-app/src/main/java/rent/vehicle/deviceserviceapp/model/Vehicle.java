@@ -1,5 +1,6 @@
 package rent.vehicle.deviceserviceapp.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 import org.locationtech.jts.geom.Point;
@@ -23,6 +24,7 @@ public class Vehicle implements Serializable {
     private String registrationNumber;
 
     @OneToOne(fetch = FetchType.EAGER)
+    @JsonIgnore
     private Device device;
 
     @Column()

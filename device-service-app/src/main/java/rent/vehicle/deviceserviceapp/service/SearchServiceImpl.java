@@ -24,11 +24,11 @@ import java.util.stream.Collectors;
 @Service
 @RequiredArgsConstructor
 public class SearchServiceImpl implements SearchService {
-    final DeviceConfigService deviceConfigService;
-    final DeviceService deviceService;
-    final VehicleService vehicleService;
-    final PointService pointService;
-    final ModelMapper modelMapper;
+    private final DeviceConfigService deviceConfigService;
+    private final DeviceService deviceService;
+    private final VehicleService vehicleService;
+    private final PointService pointService;
+    private final ModelMapper modelMapper;
     private final PointServiceImpl pointServiceImpl;
 
     @Override
@@ -51,7 +51,7 @@ public class SearchServiceImpl implements SearchService {
             );
             CustomPage<DeviceConfigDto> deviceConfigDtoCustomPage = findDevicesConfigByParam(listDevicesRequest.getListDeviceConfigsRequest(), devicePageable);
             listDevicesRequest.setDeviceConfigIds(
-                    deviceConfigDtoCustomPage.stream()
+                    deviceConfigDtoCustomPage.getContent().stream()
                             .map(DeviceConfigDto::getId)
                             .collect(Collectors.toSet())
             );
@@ -78,7 +78,7 @@ public class SearchServiceImpl implements SearchService {
 
             CustomPage<DeviceDto> deviceDtoCustomPage = findDevicesByParams(listVehiclesRequest.getListDevicesRequest(), devicePageable);
             listVehiclesRequest.setDeviceIds(
-                    deviceDtoCustomPage.stream()
+                    deviceDtoCustomPage.getContent().stream()
                             .map(DeviceDto::getId)
                             .peek(id -> System.out.println("Device ID: " + id))
                             .collect(Collectors.toSet())
