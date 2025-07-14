@@ -1,5 +1,6 @@
 package rent.vehicle.deviceserviceapp.service;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.core.annotation.Order;
@@ -23,9 +24,10 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class DeviceServiceImpl implements DeviceService {
-    final DeviceRepository deviceRepository;
-    final DeviceConfigService deviceConfigService;
-    final ModelMapper modelMapper;
+    private final DeviceRepository deviceRepository;
+    private final DeviceConfigService deviceConfigService;
+    private final ModelMapper modelMapper;
+    private final EntityManager entityManager;
 
     @Transactional
     @Override
@@ -106,7 +108,13 @@ public class DeviceServiceImpl implements DeviceService {
                 .map(device -> modelMapper.map(device, DeviceDto.class))
                 .toList();
 
-        return new CustomPage<>(dtoContent, devicePage.getNumber(), devicePage.getSize(), devicePage.getTotalElements());
+        CustomPage<DeviceDto> returnDto = new CustomPage<>(dtoContent, devicePage.getNumber(), devicePage.getSize(), devicePage.getTotalElements());
+
+        entityManager.flush();
+        entityManager.clear();
+
+        return returnDto;
+
     }
 
     @Transactional(readOnly = true)
