@@ -30,5 +30,4 @@ public class CustomPage<T> {
         this.totalElements = totalElements;
     }
 
-    // геттеры и сеттеры
 }
